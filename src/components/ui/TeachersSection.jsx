@@ -2,26 +2,7 @@ import React from 'react';
 import { Icon } from '@iconify/react';
 import { motion } from 'framer-motion';
 
-const teachers = [
-    {
-        name: "Sarah Jenkins",
-        role: "Business English Expert",
-        image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=2576&auto=format&fit=crop",
-        flag: "🇺🇸"
-    },
-    {
-        name: "David Martinez",
-        role: "IELTS & Exam Prep",
-        image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=2574&auto=format&fit=crop",
-        flag: "🇬🇧"
-    },
-    {
-        name: "Emma Wilson",
-        role: "Kids Specialist",
-        image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=2661&auto=format&fit=crop",
-        flag: "🇨🇦"
-    }
-];
+import { teachers } from '../../data/teachers';
 
 const TeachersSection = () => {
     return (
@@ -37,7 +18,7 @@ const TeachersSection = () => {
                 <div className="grid md:grid-cols-3 gap-8">
                     {teachers.map((teacher, idx) => (
                         <motion.div
-                            key={idx}
+                            key={teacher.id}
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             transition={{ delay: idx * 0.1 }}
@@ -56,11 +37,15 @@ const TeachersSection = () => {
                             </div>
                             <div className="p-6">
                                 <h3 className="text-xl font-bold text-gray-900">{teacher.name}</h3>
-                                <p className="text-brand-600 font-medium mb-4">{teacher.role}</p>
+                                <p className="text-brand-600 font-medium mb-2">{teacher.role}</p>
+                                <p className="text-gray-500 text-sm mb-4 line-clamp-2">{teacher.bio}</p>
 
-                                <div className="flex gap-2">
+                                <div className="flex flex-wrap gap-2">
                                     <span className="px-3 py-1 bg-gray-100 text-gray-600 text-xs rounded-full">TEFL Certified</span>
-                                    <span className="px-3 py-1 bg-gray-100 text-gray-600 text-xs rounded-full">5+ Years Exp</span>
+                                    <span className="px-3 py-1 bg-gray-100 text-gray-600 text-xs rounded-full">{teacher.exp} Exp</span>
+                                    {teacher.tags.map(tag => (
+                                        <span key={tag} className="px-3 py-1 bg-brand-50 text-brand-600 text-xs rounded-full">{tag}</span>
+                                    ))}
                                 </div>
                             </div>
                         </motion.div>

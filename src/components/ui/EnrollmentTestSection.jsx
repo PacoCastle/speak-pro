@@ -1,21 +1,27 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Icon } from '@iconify/react';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
+import BookingModal from './BookingModal';
 
 const EnrollmentTestSection = () => {
     const { t } = useTranslation();
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [bookingType, setBookingType] = useState('Adults');
 
-    const scrollToContact = (e) => {
-        e.preventDefault();
-        const element = document.getElementById('contact');
-        if (element) {
-            element.scrollIntoView({ behavior: 'smooth' });
-        }
+    const handleBook = (type) => {
+        setBookingType(type);
+        setIsModalOpen(true);
     };
 
     return (
         <section id="test" className="py-24 bg-brand-600 relative overflow-hidden mb-24">
+            <BookingModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                defaultType={bookingType}
+            />
+
             {/* Background patterns */}
             <div className="absolute inset-0 opacity-10">
                 <div className="absolute -top-24 -left-24 w-96 h-96 bg-white rounded-full blur-3xl" />
@@ -37,12 +43,11 @@ const EnrollmentTestSection = () => {
                         </p>
 
                         <div className="grid sm:grid-cols-2 gap-6">
-                            <motion.a
-                                href="#contact"
-                                onClick={scrollToContact}
+                            <motion.button
+                                onClick={() => handleBook('Adults')}
                                 whileHover={{ scale: 1.02 }}
                                 whileTap={{ scale: 0.98 }}
-                                className="p-6 bg-white rounded-2xl shadow-xl flex flex-col items-center text-center group transition-all cursor-pointer block w-full"
+                                className="p-6 bg-white rounded-2xl shadow-xl flex flex-col items-center text-center group transition-all cursor-pointer block w-full text-left"
                             >
                                 <div className="p-4 bg-brand-50 rounded-xl mb-4 group-hover:bg-brand-500 transition-colors">
                                     <Icon icon="mdi:account-school" className="text-4xl text-brand-600 group-hover:text-white" />
@@ -50,14 +55,13 @@ const EnrollmentTestSection = () => {
                                 <span className="font-bold text-gray-900 text-lg mb-1">{t('placement.cta_adults')}</span>
                                 <span className="text-sm text-gray-500">Ages 16+</span>
                                 <span className="text-xs text-brand-500 mt-2 font-semibold">Book Now &rarr;</span>
-                            </motion.a>
+                            </motion.button>
 
-                            <motion.a
-                                href="#contact"
-                                onClick={scrollToContact}
+                            <motion.button
+                                onClick={() => handleBook('Kids')}
                                 whileHover={{ scale: 1.02 }}
                                 whileTap={{ scale: 0.98 }}
-                                className="p-6 bg-white rounded-2xl shadow-xl flex flex-col items-center text-center group transition-all cursor-pointer block w-full"
+                                className="p-6 bg-white rounded-2xl shadow-xl flex flex-col items-center text-center group transition-all cursor-pointer block w-full text-left"
                             >
                                 <div className="p-4 bg-yellow-50 rounded-xl mb-4 group-hover:bg-yellow-400 transition-colors">
                                     <Icon icon="mdi:face-man-shimmer" className="text-4xl text-yellow-600 group-hover:text-white" />
@@ -65,7 +69,7 @@ const EnrollmentTestSection = () => {
                                 <span className="font-bold text-gray-900 text-lg mb-1">{t('placement.cta_kids')}</span>
                                 <span className="text-sm text-gray-500">Ages 4 - 15</span>
                                 <span className="text-xs text-yellow-600 mt-2 font-semibold">Book Now &rarr;</span>
-                            </motion.a>
+                            </motion.button>
                         </div>
                     </motion.div>
 
