@@ -3,6 +3,7 @@ import { Icon } from '@iconify/react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import Logo from '../ui/Logo';
+import { useScrollTo } from '../../hooks/useScrollTo';
 
 const languages = [
     { code: 'en', name: 'English', flag: 'circle-flags:us' },
@@ -10,15 +11,24 @@ const languages = [
     { code: 'it', name: 'Italiano', flag: 'circle-flags:it' }
 ];
 
+
+
 const Navbar = () => {
     const [isScrolled, setIsScrolled] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [showLangDropdown, setShowLangDropdown] = useState(false);
     const { t, i18n } = useTranslation();
+    const scrollTo = useScrollTo();
 
     const changeLanguage = (lang) => {
         i18n.changeLanguage(lang);
         setShowLangDropdown(false);
+    };
+
+    const handleNavClick = (e, href) => {
+        e.preventDefault();
+        scrollTo(href.replace('#', ''));
+        setMobileMenuOpen(false);
     };
 
     const currentLang = languages.find(l => l.code === i18n.language) || languages[0];
@@ -50,7 +60,7 @@ const Navbar = () => {
                 <div className="flex justify-between items-center">
 
                     {/* Logo Section */}
-                    <div className="flex items-center gap-3 cursor-pointer group">
+                    <div className="flex items-center gap-3 cursor-pointer group" onClick={(e) => handleNavClick(e, '#home')}>
                         <Logo className="h-12 w-auto" />
                         <div className="flex flex-col">
                             <span className={`font-sans font-black leading-none tracking-tight text-xl ${isScrolled ? 'text-gray-900' : 'text-white'}`}>
@@ -68,6 +78,7 @@ const Navbar = () => {
                             <a
                                 key={link.name}
                                 href={link.href}
+                                onClick={(e) => handleNavClick(e, link.href)}
                                 className={`text-sm font-semibold transition-colors hover:text-brand-500 relative ${isScrolled ? 'text-gray-600' : 'text-white/90'
                                     }`}
                             >
