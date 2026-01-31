@@ -20,9 +20,8 @@ test.describe('SpeakPro MVP Features', () => {
         await teachersSection.scrollIntoViewIfNeeded();
 
         // Check for specific dynamic data we added
-        await expect(page.getByText('Sarah Jenkins')).toBeVisible();
-        await expect(page.getByText('Business English Expert')).toBeVisible();
-        await expect(page.getByText('David Martinez')).toBeVisible();
+        await expect(page.getByText('Samuel Perez')).toBeVisible();
+        await expect(page.getByText('Specializing in Bussines communication')).toBeVisible();
     });
 
     test('Placement Test Booking Flow (Adults)', async ({ page }) => {
