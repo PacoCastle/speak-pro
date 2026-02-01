@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Icon } from '@iconify/react';
 
+import { emailService } from '../../services/emailService';
+
 const BookingModal = ({ isOpen, onClose, defaultType = "Adults" }) => {
     const [step, setStep] = useState(1);
     const [formData, setFormData] = useState({ name: '', email: '', type: defaultType });
@@ -11,10 +13,14 @@ const BookingModal = ({ isOpen, onClose, defaultType = "Adults" }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsSubmitting(true);
-        // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 1500));
-        setIsSubmitting(false);
-        setStep(2);
+        try {
+            await emailService.sendEmail(formData);
+            setStep(2);
+        } catch (error) {
+            alert(error.message); // Simple error handling for now
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     if (!isOpen) return null;

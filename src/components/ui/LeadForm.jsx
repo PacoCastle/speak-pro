@@ -4,6 +4,8 @@ import { Icon } from '@iconify/react';
 // eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from 'framer-motion';
 
+import { emailService } from '../../services/emailService';
+
 const LeadForm = () => {
     const { register, handleSubmit, formState: { errors }, reset } = useForm();
     const [isSubmitted, setIsSubmitted] = useState(false);
@@ -11,13 +13,16 @@ const LeadForm = () => {
 
     const onSubmit = async (data) => {
         setIsLoading(true);
-        // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 1500));
-        console.log(data);
-        setIsLoading(false);
-        setIsSubmitted(true);
-        reset();
-        setTimeout(() => setIsSubmitted(false), 5000);
+        try {
+            await emailService.sendEmail(data);
+            setIsSubmitted(true);
+            reset();
+            setTimeout(() => setIsSubmitted(false), 5000);
+        } catch (error) {
+            alert(error.message);
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     const inputClasses = "w-full pl-10 pr-4 py-3 bg-white/5 border border-white/20 rounded-xl focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all text-gray-800 placeholder-gray-400 backdrop-blur-sm";
