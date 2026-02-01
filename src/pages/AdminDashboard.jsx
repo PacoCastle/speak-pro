@@ -1,15 +1,22 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { Icon } from '@iconify/react';
+import AdminStudents from '../components/admin/AdminStudents';
+import AdminTeachers from '../components/admin/AdminTeachers';
+import AdminBookings from '../components/admin/AdminBookings';
 
 const AdminDashboard = () => {
     const { user, logout } = useAuth();
     const navigate = useNavigate();
-    const [stats] = useState({
+    const [activeTab, setActiveTab] = useState('overview');
+
+    // Mock Stats (Memoized to avoid lint warning about sync State if needed, but simple obj here is fine)
+    const stats = {
         students: 124,
         activeBookings: 15,
         revenue: "$12,450"
-    });
+    };
 
     const handleLogout = () => {
         logout();
@@ -33,64 +40,102 @@ const AdminDashboard = () => {
         );
     }
 
+    const navigation = [
+        { id: 'overview', label: 'Overview', icon: 'mdi:view-dashboard' },
+        { id: 'students', label: 'Students', icon: 'mdi:account-school' },
+        { id: 'teachers', label: 'Teachers', icon: 'mdi:human-male-board' },
+        { id: 'bookings', label: 'Bookings', icon: 'mdi:calendar-check' },
+    ];
+
     return (
         <div className="min-h-screen bg-gray-100 flex">
             {/* Sidebar */}
             <aside className="w-64 bg-slate-800 text-white hidden md:block">
                 <div className="p-6">
-                    <h2 className="text-xl font-bold">SpeakPro Admin</h2>
+                    <h2 className="text-xl font-bold font-display">SpeakPro Admin</h2>
                 </div>
                 <nav className="mt-6">
-                    <a href="#" className="block px-6 py-3 bg-slate-700 border-l-4 border-brand-500">Dashboard</a>
-                    <a href="#" className="block px-6 py-3 hover:bg-slate-700 text-gray-300">Students</a>
-                    <a href="#" className="block px-6 py-3 hover:bg-slate-700 text-gray-300">Teachers</a>
-                    <a href="#" className="block px-6 py-3 hover:bg-slate-700 text-gray-300">Bookings</a>
+                    {navigation.map((item) => (
+                        <button
+                            key={item.id}
+                            onClick={() => setActiveTab(item.id)}
+                            className={`w-full flex items-center gap-3 px-6 py-3 text-left transition-colors ${activeTab === item.id
+                                    ? 'bg-brand-600 border-r-4 border-white text-white'
+                                    : 'text-slate-300 hover:bg-slate-700'
+                                }`}
+                        >
+                            <Icon icon={item.icon} className="text-xl" />
+                            <span className="font-medium">{item.label}</span>
+                        </button>
+                    ))}
                 </nav>
             </aside>
 
             {/* Main Content */}
-            <main className="flex-1 p-8">
+            <main className="flex-1 p-8 overflow-y-auto">
                 <div className="flex justify-between items-center mb-8">
-                    <h1 className="text-2xl font-bold text-gray-800">Administrator Dashboard</h1>
+                    <h1 className="text-2xl font-bold text-gray-800">
+                        {navigation.find(n => n.id === activeTab)?.label}
+                    </h1>
                     <div className="flex items-center gap-4">
-                        <span className="text-gray-600">{user.email}</span>
+                        <span className="text-sm text-gray-600 bg-white px-3 py-1 rounded-full border border-gray-200">
+                            {user.email}
+                        </span>
                         <button
                             onClick={handleLogout}
-                            className="text-red-600 hover:text-red-800 font-medium"
+                            className="text-red-600 hover:text-red-800 font-medium text-sm flex items-center gap-1"
                         >
-                            Logout
+                            <Icon icon="mdi:logout" /> Logout
                         </button>
                     </div>
                 </div>
 
-                {/* Stats Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                    <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-                        <div className="text-gray-500 text-sm font-medium uppercase">Total Students</div>
-                        <div className="mt-2 text-3xl font-bold text-brand-600">{stats.students}</div>
-                    </div>
-                    <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-                        <div className="text-gray-500 text-sm font-medium uppercase">Active Bookings</div>
-                        <div className="mt-2 text-3xl font-bold text-brand-600">{stats.activeBookings}</div>
-                    </div>
-                    <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-                        <div className="text-gray-500 text-sm font-medium uppercase">Total Revenue</div>
-                        <div className="mt-2 text-3xl font-bold text-green-600">{stats.revenue}</div>
-                    </div>
-                </div>
+                {/* Content Rendering */}
+                {activeTab === 'overview' && (
+                    <div className="space-y-8 animate-fade-in">
+                        {/* Stats Grid */}
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                                <div className="text-gray-500 text-sm font-medium uppercase text-brand-500">Total Students</div>
+                                <div className="mt-2 text-3xl font-bold text-gray-900">{stats.students}</div>
+                            </div>
+                            <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                                <div className="text-gray-500 text-sm font-medium uppercase text-blue-500">Active Bookings</div>
+                                <div className="mt-2 text-3xl font-bold text-gray-900">{stats.activeBookings}</div>
+                            </div>
+                            <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                                <div className="text-gray-500 text-sm font-medium uppercase text-green-500">Total Revenue</div>
+                                <div className="mt-2 text-3xl font-bold text-gray-900">{stats.revenue}</div>
+                            </div>
+                        </div>
 
-                {/* Recent Activity Mockup */}
-                <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-                    <div className="px-6 py-4 border-b border-gray-200">
-                        <h3 className="font-bold text-gray-800">Recent Activity</h3>
+                        {/* Recent Activity Snapshot */}
+                        <AdminBookings />
                     </div>
-                    <div className="p-6 text-gray-500 text-center italic">
-                        No recent activity found.
+                )}
+
+                {activeTab === 'students' && (
+                    <div className="animate-fade-in">
+                        <AdminStudents />
                     </div>
-                </div>
+                )}
+
+                {activeTab === 'teachers' && (
+                    <div className="animate-fade-in">
+                        <AdminTeachers />
+                    </div>
+                )}
+
+                {activeTab === 'bookings' && (
+                    <div className="animate-fade-in">
+                        <AdminBookings />
+                    </div>
+                )}
+
             </main>
         </div>
     );
 };
 
 export default AdminDashboard;
+
