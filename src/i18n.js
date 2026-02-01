@@ -14,6 +14,11 @@ const resources = {
                 login: "Student Login",
                 freeTest: "Free Level Test"
             },
+            seo: {
+                title: "SpeakPro | Online English Academy",
+                description: "Master English with certified native teachers. Personalized 1-on-1 classes for adults and kids. Book your free trial today.",
+                keywords: "english classes, online tutor, learn english, ielts preparation, kids english"
+            },
             hero: {
                 title1: "SpeakPro Academy",
                 title2: "English for Everyone",
@@ -103,6 +108,11 @@ const resources = {
                 login: "Acceso Alumnos",
                 freeTest: "Prueba de Nivel Gratis"
             },
+            seo: {
+                title: "SpeakPro | Academia de Inglés Online",
+                description: "Domina el inglés con profesores nativos certificados. Clases 1-a-1 personalizadas para adultos y niños. Reserva tu prueba gratis hoy.",
+                keywords: "clases de inglés, tutor online, aprender inglés, preparación ielts, inglés para niños"
+            },
             hero: {
                 title1: "Academia SpeakPro",
                 title2: "Inglés para Todos",
@@ -190,6 +200,11 @@ const resources = {
                 contact: "Contatto",
                 login: "Accesso Studenti",
                 freeTest: "Test Livello Gratuito"
+            },
+            seo: {
+                title: "SpeakPro | Accademia di Inglese Online",
+                description: "Padroneggia l'inglese con insegnanti madrelingua certificati. Lezioni 1-a-1 personalizzate per adulti e bambini. Prenota la tua prova gratuita oggi.",
+                keywords: "lezioni di inglese, tutor online, imparare inglese, preparazione ielts, inglese per bambini"
             },
             hero: {
                 title1: "Accademia SpeakPro",

@@ -1,5 +1,6 @@
 import React from 'react';
 import Navbar from './components/layout/Navbar';
+import SEO from './components/common/SEO';
 import HeroVideo from './components/ui/HeroVideo';
 import LeadForm from './components/ui/LeadForm';
 import FeaturesSection from './components/ui/FeaturesSection';
@@ -13,6 +14,7 @@ import EnrollmentTestSection from './components/ui/EnrollmentTestSection';
 function App() {
   return (
     <div className="bg-gray-50 min-h-screen font-sans selection:bg-brand-500 selection:text-white">
+      <SEO />
       <Navbar />
 
       <HeroVideo />
