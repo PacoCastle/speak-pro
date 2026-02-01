@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Icon } from '@iconify/react';
+// eslint-disable-next-line no-unused-vars
+import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import BookingModal from './BookingModal';
 

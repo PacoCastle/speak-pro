@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Icon } from '@iconify/react';
-import { AnimatePresence } from 'framer-motion';
+// eslint-disable-next-line no-unused-vars
+import { motion, AnimatePresence } from 'framer-motion';
 
 const LeadForm = () => {
     const { register, handleSubmit, formState: { errors }, reset } = useForm();

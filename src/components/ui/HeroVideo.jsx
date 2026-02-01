@@ -1,6 +1,7 @@
 import React from 'react';
 import { Icon } from '@iconify/react';
-import { motion } from 'framer-motion';
+// eslint-disable-next-line no-unused-vars
+import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import Logo from './Logo';
 

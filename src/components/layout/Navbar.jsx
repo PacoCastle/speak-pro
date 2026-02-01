@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Icon } from '@iconify/react';
-import { AnimatePresence } from 'framer-motion';
+// eslint-disable-next-line no-unused-vars
+import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import Logo from '../ui/Logo';
 import { useScrollTo } from '../../hooks/useScrollTo';

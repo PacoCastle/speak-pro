@@ -1,5 +1,7 @@
 import React from 'react';
 import { Icon } from '@iconify/react';
+// eslint-disable-next-line no-unused-vars
+import { motion } from 'framer-motion';
 
 const CourseCard = ({ course, index }) => {
     return (
