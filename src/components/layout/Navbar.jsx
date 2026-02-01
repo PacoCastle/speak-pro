@@ -3,8 +3,10 @@ import { Icon } from '@iconify/react';
 // eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import Logo from '../ui/Logo';
 import { useScrollTo } from '../../hooks/useScrollTo';
+import { useAuth } from '../../context/AuthContext';
 
 const languages = [
     { code: 'en', name: 'English', flag: 'circle-flags:us' },
@@ -12,14 +14,16 @@ const languages = [
     { code: 'it', name: 'Italiano', flag: 'circle-flags:it' }
 ];
 
-
-
 const Navbar = () => {
     const [isScrolled, setIsScrolled] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [showLangDropdown, setShowLangDropdown] = useState(false);
+
     const { t, i18n } = useTranslation();
     const scrollTo = useScrollTo();
+    const { user } = useAuth();
+    const navigate = useNavigate();
+    const location = useLocation();
 
     const changeLanguage = (lang) => {
         i18n.changeLanguage(lang);
@@ -28,7 +32,17 @@ const Navbar = () => {
 
     const handleNavClick = (e, href) => {
         e.preventDefault();
-        scrollTo(href.replace('#', ''));
+        const targetId = href.replace('#', '');
+
+        if (location.pathname !== '/') {
+            navigate('/');
+            // Add a small delay to allow navigation to complete before scrolling
+            setTimeout(() => {
+                scrollTo(targetId);
+            }, 100);
+        } else {
+            scrollTo(targetId);
+        }
         setMobileMenuOpen(false);
     };
 
@@ -54,7 +68,7 @@ const Navbar = () => {
 
     return (
         <nav
-            className={`fixed top-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-white/90 backdrop-blur-md shadow-sm py-3' : 'bg-transparent py-5'
+            className={`fixed top-0 w-full z-50 transition-all duration-300 ${isScrolled || location.pathname !== '/' ? 'bg-white/90 backdrop-blur-md shadow-sm py-3' : 'bg-transparent py-5'
                 }`}
         >
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -64,10 +78,10 @@ const Navbar = () => {
                     <div className="flex items-center gap-3 cursor-pointer group" onClick={(e) => handleNavClick(e, '#home')}>
                         <Logo className="h-12 w-auto" />
                         <div className="flex flex-col">
-                            <span className={`font-sans font-black leading-none tracking-tight text-xl ${isScrolled ? 'text-gray-900' : 'text-white'}`}>
+                            <span className={`font-sans font-black leading-none tracking-tight text-xl ${isScrolled || location.pathname !== '/' ? 'text-gray-900' : 'text-white'}`}>
                                 SpeakPro
                             </span>
-                            <span className={`text-xs uppercase tracking-[0.2em] font-bold ${isScrolled ? 'text-brand-600' : 'text-brand-300'}`}>
+                            <span className={`text-xs uppercase tracking-[0.2em] font-bold ${isScrolled || location.pathname !== '/' ? 'text-brand-600' : 'text-brand-300'}`}>
                                 Academy
                             </span>
                         </div>
@@ -80,7 +94,7 @@ const Navbar = () => {
                                 key={link.name}
                                 href={link.href}
                                 onClick={(e) => handleNavClick(e, link.href)}
-                                className={`text-sm font-semibold transition-colors hover:text-brand-500 relative ${isScrolled ? 'text-gray-600' : 'text-white/90'
+                                className={`text-sm font-semibold transition-colors hover:text-brand-500 relative ${isScrolled || location.pathname !== '/' ? 'text-gray-600' : 'text-white/90'
                                     }`}
                             >
                                 {link.name}
@@ -95,17 +109,44 @@ const Navbar = () => {
                         {/* Free Test Button */}
                         <a
                             href="#test"
+                            onClick={(e) => handleNavClick(e, '#test')}
                             className={`hidden xl:inline-flex items-center justify-center px-6 py-2 border border-transparent text-sm font-bold rounded-full text-white bg-gradient-to-r from-brand-600 to-blue-500 hover:from-brand-700 hover:to-blue-600 shadow-lg transform hover:scale-105 transition-all`}
                         >
                             <Icon icon="mdi:clipboard-text-outline" className="mr-2 text-lg" />
                             {t('nav.freeTest')}
                         </a>
 
+                        {/* User / Login Section */}
+                        {user ? (
+                            <Link
+                                to="/dashboard"
+                                className={`hidden xl:inline-flex items-center justify-center px-4 py-2 border text-sm font-bold rounded-full transition-all ${isScrolled || location.pathname !== '/'
+                                        ? 'border-brand-200 text-brand-600 bg-brand-50 hover:bg-brand-100'
+                                        : 'border-white/20 text-white bg-white/10 hover:bg-white/20'
+                                    }`}
+                            >
+                                <Icon icon="mdi:view-dashboard-outline" className="mr-2 text-lg" />
+                                Dashboard
+                            </Link>
+                        ) : (
+                            <Link
+                                to="/login"
+                                className={`hidden xl:inline-flex items-center justify-center px-4 py-2 border text-sm font-bold rounded-full transition-all ${isScrolled || location.pathname !== '/'
+                                        ? 'border-gray-200 text-gray-700 bg-white hover:bg-gray-50'
+                                        : 'border-white/20 text-white bg-white/10 hover:bg-white/20'
+                                    }`}
+                            >
+                                <Icon icon="mdi:login" className="mr-2 text-lg" />
+                                {t('nav.login')}
+                            </Link>
+                        )}
+
+
                         {/* Multi-Language Selector */}
                         <div className="relative">
                             <button
                                 onClick={() => setShowLangDropdown(!showLangDropdown)}
-                                className={`flex items-center gap-2 px-3 py-1.5 rounded-full border transition-all ${isScrolled
+                                className={`flex items-center gap-2 px-3 py-1.5 rounded-full border transition-all ${isScrolled || location.pathname !== '/'
                                     ? 'border-gray-200 text-gray-700 bg-gray-50'
                                     : 'border-white/20 text-white bg-white/5 hover:bg-white/10'}`}
                             >
@@ -136,14 +177,12 @@ const Navbar = () => {
                                 )}
                             </AnimatePresence>
                         </div>
-
-                        {/* Removed Login Button */}
                     </div>
 
                     {/* Mobile Menu Button */}
                     <button
                         onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                        className={`xl:hidden text-2xl ${isScrolled ? 'text-gray-900' : 'text-white'}`}
+                        className={`xl:hidden text-2xl ${isScrolled || location.pathname !== '/' ? 'text-gray-900' : 'text-white'}`}
                     >
                         <Icon icon={mobileMenuOpen ? "mdi:close" : "mdi:menu"} />
                     </button>
@@ -167,12 +206,31 @@ const Navbar = () => {
                                     transition={{ delay: idx * 0.05 }}
                                     key={link.name}
                                     href={link.href}
-                                    onClick={() => setMobileMenuOpen(false)}
+                                    onClick={(e) => handleNavClick(e, link.href)}
                                     className="text-3xl font-black text-white hover:text-brand-400"
                                 >
                                     {link.name}
                                 </motion.a>
                             ))}
+
+                            {/* Mobile Login/Dashboard */}
+                            {user ? (
+                                <Link
+                                    to="/dashboard"
+                                    onClick={() => setMobileMenuOpen(false)}
+                                    className="text-3xl font-black text-brand-400 hover:text-white"
+                                >
+                                    Dashboard
+                                </Link>
+                            ) : (
+                                <Link
+                                    to="/login"
+                                    onClick={() => setMobileMenuOpen(false)}
+                                    className="text-3xl font-black text-brand-400 hover:text-white"
+                                >
+                                    {t('nav.login')}
+                                </Link>
+                            )}
 
                             <div className="pt-8 mt-8 border-t border-white/10">
                                 <p className="text-gray-500 text-sm font-bold uppercase tracking-widest mb-4">Language</p>
