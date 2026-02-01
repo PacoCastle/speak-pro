@@ -1,27 +1,25 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 
 const AuthContext = createContext();
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        // Check for persisted session
+    // Lazy initialization to avoid useEffect for initial state
+    const [user, setUser] = useState(() => {
         const storedUser = localStorage.getItem('speakpro_user');
-        if (storedUser) {
-            setUser(JSON.parse(storedUser));
-        }
-        setLoading(false);
-    }, []);
+        return storedUser ? JSON.parse(storedUser) : null;
+    });
+    const [loading, setLoading] = useState(false);
 
     const login = async (email, password) => {
+        setLoading(true);
         // Mock Login Logic
         // In a real app, this would call your API
         return new Promise((resolve, reject) => {
             setTimeout(() => {
+                setLoading(false);
                 if (email && password) {
                     const mockUser = { id: 1, name: "Student", email, level: "B2 Upper Intermediate" };
                     setUser(mockUser);

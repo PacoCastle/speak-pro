@@ -20,7 +20,7 @@ const Login = () => {
         try {
             await login(email, password);
             navigate('/dashboard');
-        } catch (err) {
+        } catch {
             setError('Invalid credentials. Try using any email/password for this demo.');
         } finally {
             setIsSubmitting(false);
