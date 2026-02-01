@@ -44,6 +44,51 @@ const resources = {
                 subtitle: "Take our free placement test and get a personalized learning path in 15 minutes.",
                 cta_adults: "Test for Adults",
                 cta_kids: "Test for Kids"
+            },
+            teachers_section: {
+                title: "Meet Your Teachers",
+                subtitle: "Learn from the best. Our tutors are certified native speakers passionate about your success.",
+                cta: "View All 50+ Teachers"
+            },
+            courses_section: {
+                title_prefix: "Explore Our",
+                title_highlight: "Courses",
+                subtitle: "Designed for every goal and fluency level. Start your journey today.",
+                cta: "View All Programs"
+            },
+            // Dynamic Data Strings
+            teachers: {
+                samuel: {
+                    role: "Business English Expert",
+                    bio: "Specializing in Business communication and presentations.",
+                    tags: {
+                        business: "Business",
+                        interview: "Interview Prep"
+                    }
+                }
+            },
+            courses: {
+                general: {
+                    title: "General English",
+                    level: "All Levels",
+                    desc: "Master the 4 core skills: speaking, listening, reading, and writing. Perfect for everyday communication.",
+                    price: "From $25/lesson",
+                    tags: { popular: "Popular", conversation: "Conversation" }
+                },
+                business: {
+                    title: "Business English",
+                    level: "Intermediate - Advanced",
+                    desc: "Boost your career. specialized vocabulary for meetings, presentations, and negotiations.",
+                    price: "From $35/lesson",
+                    tags: { career: "Career", professional: "Professional" }
+                },
+                ielts: {
+                    title: "IELTS Preparation",
+                    level: "Advanced",
+                    desc: "Intensive training to achieve your target band score. Mock tests and personalized feedback included.",
+                    price: "From $40/lesson",
+                    tags: { exam: "Exam", academic: "Academic" }
+                }
             }
         }
     },
@@ -88,6 +133,50 @@ const resources = {
                 subtitle: "Haz nuestra prueba de nivel gratuita y obtén un plan personalizado en 15 minutos.",
                 cta_adults: "Prueba para Adultos",
                 cta_kids: "Prueba para Niños"
+            },
+            teachers_section: {
+                title: "Conoce a tus Profesores",
+                subtitle: "Aprende de los mejores. Tutores nativos certificados apasionados por tu éxito.",
+                cta: "Ver los 50+ Profesores"
+            },
+            courses_section: {
+                title_prefix: "Explora Nuestros",
+                title_highlight: "Cursos",
+                subtitle: "Diseñado para cada meta y nivel. Comienza tu viaje hoy.",
+                cta: "Ver Todos los Programas"
+            },
+            teachers: {
+                samuel: {
+                    role: "Experto en Inglés de Negocios",
+                    bio: "Especialista en comunicación empresarial y presentaciones.",
+                    tags: {
+                        business: "Negocios",
+                        interview: "Prep. Entrevistas"
+                    }
+                }
+            },
+            courses: {
+                general: {
+                    title: "Inglés General",
+                    level: "Todos los Niveles",
+                    desc: "Domina las 4 habilidades: hablar, escuchar, leer y escribir. Perfecto para la comunicación diaria.",
+                    price: "Desde $25/clase",
+                    tags: { popular: "Popular", conversation: "Conversación" }
+                },
+                business: {
+                    title: "Inglés de Negocios",
+                    level: "Intermedio - Avanzado",
+                    desc: "Impulsa tu carrera. Vocabulario especializado para reuniones, presentaciones y negociaciones.",
+                    price: "Desde $35/clase",
+                    tags: { career: "Carrera", professional: "Profesional" }
+                },
+                ielts: {
+                    title: "Preparación IELTS",
+                    level: "Avanzado",
+                    desc: "Entrenamiento intensivo para lograr tu puntaje objetivo. Incluye simulacros y retroalimentación.",
+                    price: "Desde $40/clase",
+                    tags: { exam: "Examen", academic: "Académico" }
+                }
             }
         }
     },
@@ -132,6 +221,50 @@ const resources = {
                 subtitle: "Fai il nostro test di livello gratuito e ottieni un percorso personalizzato in 15 minuti.",
                 cta_adults: "Test per Adulti",
                 cta_kids: "Test per Bambini"
+            },
+            teachers_section: {
+                title: "Incontra i tuoi Insegnanti",
+                subtitle: "Impara dai migliori. Tutor madrelingua certificati appassionati del tuo successo.",
+                cta: "Vedi tutti i 50+ Insegnanti"
+            },
+            courses_section: {
+                title_prefix: "Esplora i Nostri",
+                title_highlight: "Corsi",
+                subtitle: "Progettato per ogni obiettivo e livello. Inizia il tuo viaggio oggi.",
+                cta: "Vedi Tutti i Programmi"
+            },
+            teachers: {
+                samuel: {
+                    role: "Esperto Inglese Commerciale",
+                    bio: "Specializzato in comunicazione aziendale e presentazioni.",
+                    tags: {
+                        business: "Business",
+                        interview: "Prep. Colloqui"
+                    }
+                }
+            },
+            courses: {
+                general: {
+                    title: "Inglese Generale",
+                    level: "Tutti i Livelli",
+                    desc: "Padroneggia le 4 abilità: parlare, ascoltare, leggere e scrivere.",
+                    price: "Da $25/lezione",
+                    tags: { popular: "Popolare", conversation: "Conversazione" }
+                },
+                business: {
+                    title: "Inglese Commerciale",
+                    level: "Intermedio - Avanzato",
+                    desc: "Migliora la tua carriera. Vocabolario specializzato per riunioni e presentazioni.",
+                    price: "Da $35/lezione",
+                    tags: { career: "Carriera", professional: "Professionale" }
+                },
+                ielts: {
+                    title: "Preparazione IELTS",
+                    level: "Avanzato",
+                    desc: "Formazione intensiva per raggiungere il tuo punteggio obiettivo.",
+                    price: "Da $40/lezione",
+                    tags: { exam: "Esame", academic: "Accademico" }
+                }
             }
         }
     }

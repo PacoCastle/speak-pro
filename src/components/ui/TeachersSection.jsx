@@ -2,17 +2,20 @@ import React from 'react';
 import { Icon } from '@iconify/react';
 // eslint-disable-next-line no-unused-vars
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 
 import { teachers } from '../../data/teachers';
 
 const TeachersSection = () => {
+    const { t } = useTranslation();
+
     return (
         <section id="teachers" className="py-24 bg-gray-50">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="text-center mb-16">
-                    <h2 className="text-4xl font-bold text-gray-900 mb-4">Meet Your Teachers</h2>
+                    <h2 className="text-4xl font-bold text-gray-900 mb-4">{t('teachers_section.title')}</h2>
                     <p className="text-xl text-gray-500 max-w-2xl mx-auto">
-                        Learn from the best. Our tutors are certified native speakers passionate about your success.
+                        {t('teachers_section.subtitle')}
                     </p>
                 </div>
 
@@ -38,14 +41,14 @@ const TeachersSection = () => {
                             </div>
                             <div className="p-6">
                                 <h3 className="text-xl font-bold text-gray-900">{teacher.name}</h3>
-                                <p className="text-brand-600 font-medium mb-2">{teacher.role}</p>
-                                <p className="text-gray-500 text-sm mb-4 line-clamp-2">{teacher.bio}</p>
+                                <p className="text-brand-600 font-medium mb-2">{t(teacher.role)}</p>
+                                <p className="text-gray-500 text-sm mb-4 line-clamp-2">{t(teacher.bio)}</p>
 
                                 <div className="flex flex-wrap gap-2">
                                     <span className="px-3 py-1 bg-gray-100 text-gray-600 text-xs rounded-full">TEFL Certified</span>
                                     <span className="px-3 py-1 bg-gray-100 text-gray-600 text-xs rounded-full">{teacher.exp} Exp</span>
                                     {teacher.tags.map(tag => (
-                                        <span key={tag} className="px-3 py-1 bg-brand-50 text-brand-600 text-xs rounded-full">{tag}</span>
+                                        <span key={tag} className="px-3 py-1 bg-brand-50 text-brand-600 text-xs rounded-full">{t(tag)}</span>
                                     ))}
                                 </div>
                             </div>
@@ -55,7 +58,7 @@ const TeachersSection = () => {
 
                 <div className="text-center mt-12">
                     <button className="text-brand-600 font-bold hover:text-brand-700 flex items-center justify-center gap-2 mx-auto">
-                        View All 50+ Teachers <Icon icon="mdi:arrow-right" />
+                        {t('teachers_section.cta')} <Icon icon="mdi:arrow-right" />
                     </button>
                 </div>
             </div>

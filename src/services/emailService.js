@@ -1,9 +1,8 @@
-/**
- * Service to handle email sending logic.
- * Currently uses a mock implementation.
- * Can be easily swapped with EmailJS or a backend API.
- */
+import emailjs from '@emailjs/browser';
 
+/**
+ * Service to handle email sending logic using EmailJS.
+ */
 export const emailService = {
     /**
      * Sends a booking or contact email.
@@ -11,21 +10,29 @@ export const emailService = {
      * @returns {Promise<Object>} - Response object.
      */
     sendEmail: async (data) => {
-        console.log('Attemping to send email with data:', data);
+        const serviceID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+        const templateID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+        const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
 
-        // Simulate network delay
-        await new Promise(resolve => setTimeout(resolve, 1500));
+        if (!serviceID || !templateID || !publicKey) {
+            console.warn("EmailJS keys missing in .env. Falling back to mock implementation.");
+            // Mock behavior for testing/local dev without keys
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            return { success: true, message: 'Mock email sent successfully!' };
+        }
 
-        // Simulate success (90% chance) or random failure (10% chance) for robustness testing?
-        // For MVP, we'll assume success to keep tests stable.
-        const success = true;
-
-        if (success) {
-            console.log('Email sent successfully!');
-            return { success: true, message: 'Email sent successfully!' };
-        } else {
-            console.error('Failed to send email.');
-            throw new Error('Failed to send email. Please try again.');
+        try {
+            const response = await emailjs.send(
+                serviceID,
+                templateID,
+                data,
+                publicKey
+            );
+            console.log('EmailJS Success:', response.status, response.text);
+            return { success: true, message: 'Email sent successfully!', status: response.status };
+        } catch (error) {
+            console.error('EmailJS Failed:', error);
+            throw new Error('Failed to send email. Please try again later.');
         }
     }
 };
