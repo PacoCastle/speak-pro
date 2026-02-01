@@ -5,10 +5,13 @@ import Landing from './pages/Landing';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 
+import SEO from './components/common/SEO';
+
 function App() {
   return (
     <Router>
       <AuthProvider>
+        <SEO />
         <div className="bg-gray-50 min-h-screen font-sans selection:bg-brand-500 selection:text-white">
           <Routes>
             <Route path="/" element={<Landing />} />
