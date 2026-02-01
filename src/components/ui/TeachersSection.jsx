@@ -1,13 +1,26 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Icon } from '@iconify/react';
 // eslint-disable-next-line no-unused-vars
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-
-import { teachers } from '../../data/teachers';
+import { getTeachers } from '../../services/teacherService';
 
 const TeachersSection = () => {
     const { t } = useTranslation();
+    const [teachers, setTeachers] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const loadTeachers = async () => {
+            const data = await getTeachers();
+            setTeachers(data);
+            setLoading(false);
+        };
+        loadTeachers();
+    }, []);
+
+    if (loading) return <div className="py-20 text-center">Loading Teachers...</div>;
+
 
     return (
         <section id="teachers" className="py-24 bg-gray-50">
@@ -36,7 +49,11 @@ const TeachersSection = () => {
                                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                                 />
                                 <div className="absolute top-4 right-4 text-3xl shadow-sm">
-                                    {teacher.flag}
+                                    {teacher.flag === 'us' && '🇺🇸'}
+                                    {teacher.flag === 'it' && '🇮🇹'}
+                                    {teacher.flag === 'mx' && '🇲🇽'}
+                                    {teacher.flag === 'es' && '🇪🇸'}
+                                    {teacher.flag === 'gb' && '🇬🇧'}
                                 </div>
                             </div>
                             <div className="p-6">
