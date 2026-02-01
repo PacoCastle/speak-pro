@@ -1,0 +1,39 @@
+// @ts-check
+import { test, expect } from '@playwright/test';
+
+test.describe('Admin Dashboard Access', () => {
+
+    test('Admin login redirects to Admin Dashboard', async ({ page }) => {
+        await page.goto('/login');
+
+        // Fill Admin Credentials (using magic string from AuthContext)
+        await page.fill('input[type="email"]', 'admin@speakpro.com');
+        await page.fill('input[type="password"]', 'securePassword123');
+        await page.click('button[type="submit"]');
+
+        // Wait for redirect
+        await page.waitForURL('**/admin');
+
+        // precise Admin check
+        await expect(page).toHaveURL(/\/admin/);
+        await expect(page.locator('h1')).toContainText('Administrator Dashboard');
+        await expect(page.getByText('SpeakPro Admin')).toBeVisible();
+    });
+
+    test('Regular student login redirects to Student Dashboard', async ({ page }) => {
+        await page.goto('/login');
+
+        // Standard User
+        await page.fill('input[type="email"]', 'student@example.com');
+        await page.fill('input[type="password"]', 'password');
+        await page.click('button[type="submit"]');
+
+        await page.waitForURL('**/dashboard');
+        await expect(page).toHaveURL(/\/dashboard/);
+
+        // Cannot access Admin
+        await page.goto('/admin');
+        await expect(page.locator('text=Access Denied')).toBeVisible();
+    });
+
+});

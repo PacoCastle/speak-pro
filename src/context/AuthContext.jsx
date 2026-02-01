@@ -21,7 +21,15 @@ export const AuthProvider = ({ children }) => {
             setTimeout(() => {
                 setLoading(false);
                 if (email && password) {
-                    const mockUser = { id: 1, name: "Student", email, level: "B2 Upper Intermediate" };
+                    // Check for Admin Credentials
+                    const isAdmin = email.includes('admin');
+                    const mockUser = {
+                        id: isAdmin ? 999 : 1,
+                        name: isAdmin ? "Administrator" : "Student",
+                        email,
+                        level: isAdmin ? "N/A" : "B2 Upper Intermediate",
+                        role: isAdmin ? 'admin' : 'student'
+                    };
                     setUser(mockUser);
                     localStorage.setItem('speakpro_user', JSON.stringify(mockUser));
                     resolve(mockUser);
