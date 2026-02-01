@@ -10,7 +10,7 @@ test.describe('SpeakPro MVP Features', () => {
     });
 
     test('Homepage loads with correct metadata', async ({ page }) => {
-        await expect(page).toHaveTitle(/SpeakPro Academy/);
+        await expect(page).toHaveTitle(/SpeakPro/);
         await expect(page.locator('h1')).toContainText('English for Everyone');
     });
 

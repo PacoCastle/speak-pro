@@ -22,6 +22,10 @@ test('SEO metadata updates on language change', async ({ page }) => {
     // 4. Verify Spanish Title
     await expect(page).toHaveTitle(/Academia de Inglés Online/);
 
+    // Check Spanish Meta Description
+    const metaDescEs = await page.getAttribute('meta[name="description"]', 'content');
+    expect(metaDescEs).toContain('Domina el inglés con profesores nativos');
+
     // 5. Verify Open Graph Tags (Just one as a sample)
     const ogTitle = await page.getAttribute('meta[property="og:title"]', 'content');
     expect(ogTitle).toContain('Academia de Inglés Online');

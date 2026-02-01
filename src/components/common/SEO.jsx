@@ -10,8 +10,33 @@ const SEO = ({ title, description }) => {
     const siteKeywords = t('seo.keywords');
 
     React.useEffect(() => {
+        // Force Title Update
         document.title = siteTitle;
-    }, [siteTitle]);
+
+        // Helper to update or create meta tags
+        const updateMeta = (nameAttr, nameValue, content) => {
+            let element = document.querySelector(`meta[${nameAttr}="${nameValue}"]`);
+            if (!element) {
+                element = document.createElement('meta');
+                element.setAttribute(nameAttr, nameValue);
+                document.head.appendChild(element);
+            }
+            element.setAttribute('content', content);
+        };
+
+        // Force Meta Description
+        updateMeta('name', 'description', siteDescription);
+
+        // Force Open Graph
+        updateMeta('property', 'og:title', siteTitle);
+        updateMeta('property', 'og:description', siteDescription);
+        updateMeta('property', 'og:locale', i18n.language);
+
+        // Force Twitter
+        updateMeta('name', 'twitter:title', siteTitle);
+        updateMeta('name', 'twitter:description', siteDescription);
+
+    }, [siteTitle, siteDescription, i18n.language]);
 
     return (
         <Helmet htmlAttributes={{ lang: i18n.language }}>
