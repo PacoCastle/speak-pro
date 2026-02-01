@@ -18,8 +18,12 @@ const Login = () => {
         setError('');
         setIsSubmitting(true);
         try {
-            await login(email, password);
-            navigate('/dashboard');
+            const user = await login(email, password);
+            if (user.role === 'admin') {
+                navigate('/admin');
+            } else {
+                navigate('/dashboard');
+            }
         } catch {
             setError('Invalid credentials. Try using any email/password for this demo.');
         } finally {

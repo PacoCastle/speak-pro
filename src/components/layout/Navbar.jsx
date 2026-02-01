@@ -119,21 +119,21 @@ const Navbar = () => {
                         {/* User / Login Section */}
                         {user ? (
                             <Link
-                                to="/dashboard"
+                                to={user.role === 'admin' ? "/admin" : "/dashboard"}
                                 className={`hidden xl:inline-flex items-center justify-center px-4 py-2 border text-sm font-bold rounded-full transition-all ${isScrolled || location.pathname !== '/'
-                                        ? 'border-brand-200 text-brand-600 bg-brand-50 hover:bg-brand-100'
-                                        : 'border-white/20 text-white bg-white/10 hover:bg-white/20'
+                                    ? 'border-brand-200 text-brand-600 bg-brand-50 hover:bg-brand-100'
+                                    : 'border-white/20 text-white bg-white/10 hover:bg-white/20'
                                     }`}
                             >
-                                <Icon icon="mdi:view-dashboard-outline" className="mr-2 text-lg" />
-                                Dashboard
+                                <Icon icon={user.role === 'admin' ? "mdi:shield-account" : "mdi:view-dashboard-outline"} className="mr-2 text-lg" />
+                                {user.role === 'admin' ? "Admin Panel" : "Dashboard"}
                             </Link>
                         ) : (
                             <Link
                                 to="/login"
                                 className={`hidden xl:inline-flex items-center justify-center px-4 py-2 border text-sm font-bold rounded-full transition-all ${isScrolled || location.pathname !== '/'
-                                        ? 'border-gray-200 text-gray-700 bg-white hover:bg-gray-50'
-                                        : 'border-white/20 text-white bg-white/10 hover:bg-white/20'
+                                    ? 'border-gray-200 text-gray-700 bg-white hover:bg-gray-50'
+                                    : 'border-white/20 text-white bg-white/10 hover:bg-white/20'
                                     }`}
                             >
                                 <Icon icon="mdi:login" className="mr-2 text-lg" />
