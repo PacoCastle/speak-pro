@@ -5,20 +5,11 @@ import { useNavigate } from 'react-router-dom';
 const AdminDashboard = () => {
     const { user, logout } = useAuth();
     const navigate = useNavigate();
-    const [stats, setStats] = useState({
-        students: 0,
-        activeBookings: 0,
-        revenue: 0
+    const [stats] = useState({
+        students: 124,
+        activeBookings: 15,
+        revenue: "$12,450"
     });
-
-    useEffect(() => {
-        // Mock fetching stats
-        setStats({
-            students: 124,
-            activeBookings: 15,
-            revenue: "$12,450"
-        });
-    }, []);
 
     const handleLogout = () => {
         logout();
