@@ -21,7 +21,7 @@ test.describe('SpeakPro MVP Features', () => {
 
         // Check for specific dynamic data we added
         await expect(page.getByText('Samuel Perez')).toBeVisible();
-        await expect(page.getByText('Specializing in Bussines communication')).toBeVisible();
+        await expect(page.getByText('Specializing in Business communication')).toBeVisible();
     });
 
     test('Placement Test Booking Flow (Adults)', async ({ page }) => {
