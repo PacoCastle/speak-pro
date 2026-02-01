@@ -4,7 +4,7 @@ test.describe('Student Portal Flow', () => {
 
     test('User can login and see dashboard', async ({ page }) => {
         // 1. Go to Home (using preview/dev server URL from config or hardcoded)
-        await page.goto('http://localhost:5173/');
+        await page.goto('/');
 
         // 2. Click Student Login
         await page.getByRole('link', { name: 'Student Login' }).first().click();
@@ -29,14 +29,14 @@ test.describe('Student Portal Flow', () => {
         // 7. Logout
         await page.getByRole('button', { name: 'Sign Out' }).click();
 
-        // 8. Should be back home
+        // 8. Should be back home (or redirected to login if protected)
         await expect(page).toHaveURL(/.*\/login/);
         // And "Student Login" should appear again instead of "Dashboard"
         await expect(page.getByRole('link', { name: 'Student Login' }).first()).toBeVisible();
     });
 
     test('Protected route redirects to login', async ({ page }) => {
-        await page.goto('http://localhost:5173/dashboard');
+        await page.goto('/dashboard');
         // Should be redirected to login
         await expect(page).toHaveURL(/.*\/login/);
     });

@@ -9,6 +9,10 @@ const SEO = ({ title, description }) => {
     const siteDescription = description || t('seo.description');
     const siteKeywords = t('seo.keywords');
 
+    React.useEffect(() => {
+        document.title = siteTitle;
+    }, [siteTitle]);
+
     return (
         <Helmet htmlAttributes={{ lang: i18n.language }}>
             {/* Standard Metadata */}

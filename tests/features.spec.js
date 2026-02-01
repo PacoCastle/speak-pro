@@ -6,7 +6,7 @@ test.describe('SpeakPro MVP Features', () => {
     test.beforeEach(async ({ page }) => {
         // Assuming local server is running on 5173 (standard Vite)
         // If not running, you need to run `npm run dev` first.
-        await page.goto('http://localhost:5173');
+        await page.goto('/');
     });
 
     test('Homepage loads with correct metadata', async ({ page }) => {
