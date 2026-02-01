@@ -1,6 +1,5 @@
 import React from 'react';
 import { Icon } from '@iconify/react';
-import { motion } from 'framer-motion';
 
 const features = [
     {

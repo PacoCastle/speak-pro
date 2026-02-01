@@ -1,6 +1,5 @@
 import React from 'react';
 import { Icon } from '@iconify/react';
-import { motion } from 'framer-motion';
 
 import { teachers } from '../../data/teachers';
 

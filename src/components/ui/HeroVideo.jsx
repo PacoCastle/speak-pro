@@ -8,15 +8,11 @@ import Logo from './Logo';
 // The user needs to replace this file with the new one if desired
 import heroVideo from '../../assets/videos/BackgroundVideo.mp4';
 
+import { useScrollTo } from '../../hooks/useScrollTo';
+
 const HeroVideo = () => {
     const { t } = useTranslation();
-
-    const scrollToSection = (sectionId) => {
-        const element = document.getElementById(sectionId);
-        if (element) {
-            element.scrollIntoView({ behavior: 'smooth' });
-        }
-    };
+    const scrollToSection = useScrollTo();
 
     return (
         <section id="home" className="relative h-screen min-h-[700px] flex items-center justify-center overflow-hidden">

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 import { Icon } from '@iconify/react';
 
 const BookingModal = ({ isOpen, onClose, defaultType = "Adults" }) => {
