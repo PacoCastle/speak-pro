@@ -8,7 +8,7 @@ test.describe('Admin Dashboard Access', () => {
 
         // Fill Admin Credentials (using magic string from AuthContext)
         await page.fill('input[type="email"]', 'admin@speakpro.com');
-        await page.fill('input[type="password"]', 'securePassword123');
+        await page.fill('input[type="password"]', '12345');
         await page.click('button[type="submit"]');
 
         // Wait for redirect
@@ -37,8 +37,8 @@ test.describe('Admin Dashboard Access', () => {
         await page.goto('/login');
 
         // Standard User
-        await page.fill('input[type="email"]', 'student@example.com');
-        await page.fill('input[type="password"]', 'password');
+        await page.fill('input[type="email"]', 'student@test.com');
+        await page.fill('input[type="password"]', '12345');
         await page.click('button[type="submit"]');
 
         await page.waitForURL('**/dashboard');

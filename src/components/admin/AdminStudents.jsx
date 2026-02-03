@@ -1,13 +1,32 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Icon } from '@iconify/react';
+import { supabase } from '../../lib/supabase';
 
 const AdminStudents = () => {
-    // Mock Data
-    const students = [
-        { id: 1, name: "Maria Garcia", email: "maria@example.com", level: "B2", status: "Active" },
-        { id: 2, name: "Luigi Moretti", email: "luigi@example.com", level: "A2", status: "Active" },
-        { id: 3, name: "Yuki Tanaka", email: "yuki@example.com", level: "C1", status: "Paused" },
-    ];
+    const [students, setStudents] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchStudents = async () => {
+            try {
+                const { data, error } = await supabase
+                    .from('profiles')
+                    .select('*')
+                    .order('email');
+
+                if (error) throw error;
+                setStudents(data);
+            } catch (error) {
+                console.error("Error fetching students:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchStudents();
+    }, []);
+
+    if (loading) return <div className="p-8 text-center text-gray-500">Loading Students...</div>;
 
     return (
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
@@ -21,28 +40,34 @@ const AdminStudents = () => {
                 <table className="w-full text-left text-sm text-gray-600">
                     <thead className="bg-gray-50 text-xs uppercase font-medium text-gray-500">
                         <tr>
-                            <th className="px-6 py-3">Name</th>
                             <th className="px-6 py-3">Email</th>
                             <th className="px-6 py-3">Level</th>
-                            <th className="px-6 py-3">Status</th>
+                            <th className="px-6 py-3">Progress</th>
+                            <th className="px-6 py-3">Joined</th>
                             <th className="px-6 py-3 text-right">Actions</th>
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-100">
                         {students.map((student) => (
                             <tr key={student.id} className="hover:bg-gray-50">
-                                <td className="px-6 py-4 font-medium text-gray-900">{student.name}</td>
-                                <td className="px-6 py-4">{student.email}</td>
+                                <td className="px-6 py-4 font-medium text-gray-900">{student.email}</td>
                                 <td className="px-6 py-4">
                                     <span className="px-2 py-1 bg-blue-50 text-blue-700 rounded text-xs font-bold">
-                                        {student.level}
+                                        {student.level || 'A1 Beginner'}
                                     </span>
                                 </td>
                                 <td className="px-6 py-4">
-                                    <span className={`px-2 py-1 rounded text-xs font-bold ${student.status === 'Active' ? 'bg-green-50 text-green-700' : 'bg-yellow-50 text-yellow-700'
-                                        }`}>
-                                        {student.status}
-                                    </span>
+                                    <div className="w-24 bg-gray-100 rounded-full h-2">
+                                        <div
+                                            className="bg-green-500 h-2 rounded-full"
+                                            style={{ width: `${student.progress || 0}%` }}
+                                        ></div>
+                                    </div>
+                                    <span className="text-xs text-gray-400 mt-1 block">{student.progress || 0}%</span>
+                                </td>
+                                <td className="px-6 py-4 text-xs text-gray-500">
+                                    {/* Profiles table doesn't have created_at yet? It has updated_at. Using updated_at or empty for now. */}
+                                    {student.updated_at ? new Date(student.updated_at).toLocaleDateString() : '-'}
                                 </td>
                                 <td className="px-6 py-4 text-right">
                                     <button className="text-gray-400 hover:text-brand-600 transition-colors">
@@ -51,6 +76,13 @@ const AdminStudents = () => {
                                 </td>
                             </tr>
                         ))}
+                        {students.length === 0 && (
+                            <tr>
+                                <td colSpan="5" className="px-6 py-8 text-center text-gray-400">
+                                    No students found.
+                                </td>
+                            </tr>
+                        )}
                     </tbody>
                 </table>
             </div>

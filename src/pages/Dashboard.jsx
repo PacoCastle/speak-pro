@@ -1,21 +1,56 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate, Navigate } from 'react-router-dom';
 import Navbar from '../components/layout/Navbar';
 import { Icon } from '@iconify/react';
 import { Helmet } from 'react-helmet-async';
+import { getBookings } from '../services/bookingService';
+import ReviewForm from '../components/ui/ReviewForm';
 
 const Dashboard = () => {
     const { user, logout } = useAuth();
     const navigate = useNavigate();
+    const [bookings, setBookings] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     if (!user) {
         return <Navigate to="/login" replace />;
     }
 
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    useEffect(() => {
+        const fetchBookings = async () => {
+            try {
+                // Fetch ALL bookings (RLS will filter to own bookings automatically)
+                const data = await getBookings();
+                setBookings(data.filter(b => b.user_email === user.email));
+            } catch (error) {
+                console.error("Error fetching bookings:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchBookings();
+    }, [user.email]);
+
     const handleLogout = () => {
         logout();
         navigate('/');
+    };
+
+    // Calculate Next Class (Nearest Future Date)
+    const nextClass = bookings
+        .filter(b => new Date(b.date) >= new Date().setHours(0, 0, 0, 0))
+        .sort((a, b) => new Date(a.date) - new Date(b.date))[0];
+
+    // Format Date: "Today, 5:00 PM" or "Oct 24, Morning"
+    const formatDate = (dateStr, slot) => {
+        if (!dateStr) return "No upcoming classes";
+        const date = new Date(dateStr);
+        const today = new Date();
+        const isToday = date.toDateString() === today.toDateString();
+
+        return `${isToday ? "Today" : date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}, ${slot}`;
     };
 
     return (
@@ -55,13 +90,16 @@ const Dashboard = () => {
 
                         <div className="mb-4">
                             <div className="flex justify-between items-center mb-2">
-                                <span className="font-bold text-gray-700">{user.level || 'B1 Intermediate'}</span>
-                                <span className="text-brand-600 font-black">75%</span>
+                                <span className="font-bold text-gray-700">{user.level}</span>
+                                <span className="text-brand-600 font-black">{user.progress}%</span>
                             </div>
                             <div className="w-full bg-gray-100 rounded-full h-3 overflow-hidden">
-                                <div className="bg-brand-500 h-full rounded-full w-3/4 transition-all duration-1000 ease-out"></div>
+                                <div
+                                    className="bg-brand-500 h-full rounded-full transition-all duration-1000 ease-out"
+                                    style={{ width: `${user.progress}%` }}
+                                ></div>
                             </div>
-                            <p className="text-sm text-gray-400 mt-3">You are doing great! Completing 2 more modules will advance you to the next level.</p>
+                            <p className="text-sm text-gray-400 mt-3">You are doing great! Keep attending classes to advance.</p>
                         </div>
                     </div>
 
@@ -73,15 +111,32 @@ const Dashboard = () => {
                             </div>
                             <h3 className="text-xl font-bold text-gray-900">Next Class</h3>
                         </div>
-                        <div className="bg-blue-50 rounded-xl p-4 border border-blue-100 mb-4">
-                            <div className="flex items-center gap-2 text-blue-800 font-bold mb-1">
-                                <Icon icon="mdi:clock-outline" /> Today, 5:00 PM
+
+                        {loading ? (
+                            <p>Loading...</p>
+                        ) : nextClass ? (
+                            <>
+                                <div className="bg-blue-50 rounded-xl p-4 border border-blue-100 mb-4">
+                                    <div className="flex items-center gap-2 text-blue-800 font-bold mb-1">
+                                        <Icon icon="mdi:clock-outline" /> {formatDate(nextClass.date, nextClass.time_slot)}
+                                    </div>
+                                    <p className="text-blue-600 text-sm">{nextClass.status === 'Approved' ? 'Placement Test (Approved)' : 'Placement Test (Pending)'}</p>
+                                </div>
+                                <button className="w-full py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-lg font-bold transition-colors flex items-center justify-center gap-2">
+                                    <Icon icon="mdi:video" /> Join Classroom
+                                </button>
+                            </>
+                        ) : (
+                            <div className="text-center py-4">
+                                <p className="text-gray-500 mb-4">No upcoming classes.</p>
+                                <button
+                                    onClick={() => navigate('/#placement-test')}
+                                    className="w-full py-2 border border-brand-600 text-brand-600 hover:bg-brand-50 rounded-lg font-bold transition-colors"
+                                >
+                                    Book Class
+                                </button>
                             </div>
-                            <p className="text-blue-600 text-sm">Conversation Practice</p>
-                        </div>
-                        <button className="w-full py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-lg font-bold transition-colors flex items-center justify-center gap-2">
-                            <Icon icon="mdi:video" /> Join Classroom
-                        </button>
+                        )}
                     </div>
 
                     {/* Homework */}
@@ -93,15 +148,15 @@ const Dashboard = () => {
                             <h3 className="text-xl font-bold text-gray-900">Homework & Materials</h3>
                         </div>
                         <div className="space-y-4">
-                            {[1, 2, 3].map((item) => (
+                            {[1].map((item) => (
                                 <div key={item} className="flex items-center justify-between p-4 hover:bg-gray-50 rounded-xl border border-gray-100 transition-colors cursor-pointer group">
                                     <div className="flex items-center gap-4">
                                         <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-400 group-hover:bg-purple-100 group-hover:text-purple-600 transition-colors">
                                             <Icon icon="mdi:file-document-outline" className="text-xl" />
                                         </div>
                                         <div>
-                                            <h4 className="font-bold text-gray-800">Unit {item}: Advanced Grammar</h4>
-                                            <p className="text-xs text-gray-400">Added 2 days ago</p>
+                                            <h4 className="font-bold text-gray-800">Welcome Guide</h4>
+                                            <p className="text-xs text-gray-400">Essential info for new students</p>
                                         </div>
                                     </div>
                                     <Icon icon="mdi:download" className="text-gray-300 group-hover:text-brand-500 text-xl" />
@@ -110,6 +165,11 @@ const Dashboard = () => {
                         </div>
                     </div>
 
+                </div>
+
+                {/* Feedback Section */}
+                <div className="mt-8">
+                    <ReviewForm />
                 </div>
             </main>
         </div>

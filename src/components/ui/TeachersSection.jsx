@@ -12,9 +12,19 @@ const TeachersSection = () => {
 
     useEffect(() => {
         const loadTeachers = async () => {
-            const data = await getTeachers();
-            setTeachers(data);
-            setLoading(false);
+            try {
+                // Request only visible teachers directly from the service
+                const data = await getTeachers(true);
+                if (Array.isArray(data)) {
+                    setTeachers(data);
+                } else {
+                    setTeachers([]);
+                }
+            } catch (error) {
+                console.error("Critical error loading teachers:", error);
+            } finally {
+                setLoading(false);
+            }
         };
         loadTeachers();
     }, []);

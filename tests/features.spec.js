@@ -20,11 +20,17 @@ test.describe('SpeakPro MVP Features', () => {
         await teachersSection.scrollIntoViewIfNeeded();
 
         // Check for specific dynamic data we added
-        await expect(page.getByText('Samuel Perez')).toBeVisible();
-        await expect(page.getByText('Specializing in Business communication')).toBeVisible();
+        await expect(page.getByText('Sarah Jenkins')).toBeVisible();
+        await expect(page.getByText('5 Years')).toBeVisible();
     });
 
     test('Placement Test Booking Flow (Adults)', async ({ page }) => {
+        // Handle Alerts (e.g., Supabase Errors)
+        page.on('dialog', async dialog => {
+            console.log(`Dialog message: ${dialog.message()}`);
+            await dialog.accept();
+        });
+
         // Scroll to test section
         const testSection = page.locator('#test');
         await testSection.scrollIntoViewIfNeeded();
@@ -41,6 +47,8 @@ test.describe('SpeakPro MVP Features', () => {
         // Fill Form
         await page.fill('input[type="text"]', 'E2E Test User');
         await page.fill('input[type="email"]', 'test@example.com');
+        await page.fill('input[type="date"]', '2024-05-20');
+        await page.selectOption('select', 'Morning');
 
         // Submit
         await page.click('button[type="submit"]');

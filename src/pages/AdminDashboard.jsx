@@ -5,6 +5,8 @@ import { Icon } from '@iconify/react';
 import AdminStudents from '../components/admin/AdminStudents';
 import AdminTeachers from '../components/admin/AdminTeachers';
 import AdminBookings from '../components/admin/AdminBookings';
+import AdminCourses from '../components/admin/AdminCourses';
+import AdminTestimonials from '../components/admin/AdminTestimonials';
 
 const AdminDashboard = () => {
     const { user, logout } = useAuth();
@@ -44,6 +46,8 @@ const AdminDashboard = () => {
         { id: 'overview', label: 'Overview', icon: 'mdi:view-dashboard' },
         { id: 'students', label: 'Students', icon: 'mdi:account-school' },
         { id: 'teachers', label: 'Teachers', icon: 'mdi:human-male-board' },
+        { id: 'courses', label: 'Courses', icon: 'mdi:book-open-page-variant' },
+        { id: 'testimonials', label: 'Testimonials', icon: 'mdi:comment-quote-outline' },
         { id: 'bookings', label: 'Bookings', icon: 'mdi:calendar-check' },
     ];
 
@@ -60,8 +64,8 @@ const AdminDashboard = () => {
                             key={item.id}
                             onClick={() => setActiveTab(item.id)}
                             className={`w-full flex items-center gap-3 px-6 py-3 text-left transition-colors ${activeTab === item.id
-                                    ? 'bg-brand-600 border-r-4 border-white text-white'
-                                    : 'text-slate-300 hover:bg-slate-700'
+                                ? 'bg-brand-600 border-r-4 border-white text-white'
+                                : 'text-slate-300 hover:bg-slate-700'
                                 }`}
                         >
                             <Icon icon={item.icon} className="text-xl" />
@@ -129,6 +133,18 @@ const AdminDashboard = () => {
                 {activeTab === 'bookings' && (
                     <div className="animate-fade-in">
                         <AdminBookings />
+                    </div>
+                )}
+
+                {activeTab === 'courses' && (
+                    <div className="animate-fade-in">
+                        <AdminCourses />
+                    </div>
+                )}
+
+                {activeTab === 'testimonials' && (
+                    <div className="animate-fade-in">
+                        <AdminTestimonials />
                     </div>
                 )}
 

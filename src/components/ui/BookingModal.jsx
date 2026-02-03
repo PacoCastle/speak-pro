@@ -2,22 +2,39 @@ import React, { useState } from 'react';
 // eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from 'framer-motion';
 import { Icon } from '@iconify/react';
-
+import { createBooking } from '../../services/bookingService';
 import { emailService } from '../../services/emailService';
 
 const BookingModal = ({ isOpen, onClose, defaultType = "Adults" }) => {
     const [step, setStep] = useState(1);
-    const [formData, setFormData] = useState({ name: '', email: '', type: defaultType });
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        type: defaultType,
+        date: new Date().toISOString().split('T')[0], // Default today
+        time_slot: 'Morning'
+    });
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsSubmitting(true);
         try {
+            // 1. Save to Database
+            await createBooking({
+                name: formData.name,
+                email: formData.email,
+                date: formData.date,
+                time_slot: formData.time_slot
+            });
+
+            // 2. Send Confirmation Email (Mock)
             await emailService.sendEmail(formData);
+
             setStep(2);
         } catch (error) {
-            alert(error.message); // Simple error handling for now
+            console.error("Booking failed:", error);
+            alert("Booking failed: " + error.message);
         } finally {
             setIsSubmitting(false);
         }
@@ -28,7 +45,6 @@ const BookingModal = ({ isOpen, onClose, defaultType = "Adults" }) => {
     return (
         <AnimatePresence>
             <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-                {/* Backdrop */}
                 <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
@@ -37,17 +53,13 @@ const BookingModal = ({ isOpen, onClose, defaultType = "Adults" }) => {
                     className="absolute inset-0 bg-black/60 backdrop-blur-sm"
                 />
 
-                {/* Modal */}
                 <motion.div
                     initial={{ opacity: 0, scale: 0.95, y: 20 }}
                     animate={{ opacity: 1, scale: 1, y: 0 }}
-                    exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                    exit={{ opacity: 0 }}
                     className="relative bg-white rounded-2xl w-full max-w-md shadow-2xl overflow-hidden"
                 >
-                    <button
-                        onClick={onClose}
-                        className="absolute top-4 right-4 p-2 rounded-full hover:bg-gray-100 transition-colors z-10"
-                    >
+                    <button onClick={onClose} className="absolute top-4 right-4 p-2 rounded-full hover:bg-gray-100 z-10">
                         <Icon icon="mdi:close" className="text-gray-500 text-xl" />
                     </button>
 
@@ -70,60 +82,62 @@ const BookingModal = ({ isOpen, onClose, defaultType = "Adults" }) => {
                                             required
                                             value={formData.name}
                                             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                                            className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-all outline-none"
+                                            className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-brand-500 outline-none"
                                             placeholder="John Doe"
                                         />
                                     </div>
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                                        <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
                                         <input
                                             type="email"
                                             required
                                             value={formData.email}
                                             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                            className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-all outline-none"
+                                            className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-brand-500 outline-none"
                                             placeholder="john@example.com"
                                         />
+                                    </div>
+
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700 mb-1">Date</label>
+                                            <input
+                                                type="date"
+                                                required
+                                                value={formData.date}
+                                                onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+                                                className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-brand-500 outline-none"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700 mb-1">Time</label>
+                                            <select
+                                                value={formData.time_slot}
+                                                onChange={(e) => setFormData({ ...formData, time_slot: e.target.value })}
+                                                className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-brand-500 outline-none"
+                                            >
+                                                <option value="Morning">Morning</option>
+                                                <option value="Afternoon">Afternoon</option>
+                                                <option value="Evening">Evening</option>
+                                            </select>
+                                        </div>
                                     </div>
 
                                     <button
                                         type="submit"
                                         disabled={isSubmitting}
-                                        className="w-full py-4 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                                        className="w-full py-4 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-xl shadow-lg disabled:opacity-70 flex items-center justify-center gap-2"
                                     >
-                                        {isSubmitting ? (
-                                            <>
-                                                <Icon icon="mdi:loading" className="animate-spin text-xl" />
-                                                Processing...
-                                            </>
-                                        ) : (
-                                            <>
-                                                Confirm Booking
-                                                <Icon icon="mdi:arrow-right" />
-                                            </>
-                                        )}
+                                        {isSubmitting ? <Icon icon="mdi:loading" className="animate-spin" /> : 'Confirm Booking'}
                                     </button>
                                 </form>
                             </>
                         ) : (
                             <div className="text-center py-8">
-                                <motion.div
-                                    initial={{ scale: 0 }}
-                                    animate={{ scale: 1 }}
-                                    className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6"
-                                >
-                                    <Icon icon="mdi:check" className="text-4xl text-green-600" />
-                                </motion.div>
+                                <Icon icon="mdi:check-circle" className="text-6xl text-green-500 mx-auto mb-4" />
                                 <h3 className="text-2xl font-bold text-gray-900 mb-2">Booking Confirmed!</h3>
-                                <p className="text-gray-500 mb-8">
-                                    We've sent a confirmation email to <strong>{formData.email}</strong> with your test link.
-                                </p>
-                                <button
-                                    onClick={onClose}
-                                    className="px-8 py-3 bg-gray-900 text-white font-bold rounded-xl hover:bg-black transition-colors"
-                                >
-                                    Done
-                                </button>
+                                <p className="text-gray-500 mb-8">We've sent a confirmation email to <strong>{formData.email}</strong>.</p>
+                                <button onClick={onClose} className="px-8 py-3 bg-gray-900 text-white font-bold rounded-xl">Done</button>
                             </div>
                         )}
                     </div>
