@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { useNavigate, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import Navbar from '../components/layout/Navbar';
 import { Helmet } from 'react-helmet-async';
@@ -11,7 +11,6 @@ const Signup = () => {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const { signup } = useAuth();
-    const navigate = useNavigate();
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [registrationSuccess, setRegistrationSuccess] = useState(false);
 
@@ -20,7 +19,7 @@ const Signup = () => {
         setError('');
         setIsSubmitting(true);
         try {
-            const user = await signup(email, password, name);
+            await signup(email, password, name);
             // If email confirmation is enabled, user might be created but not logged in (no session).
             // We should show a success message regardless.
             setRegistrationSuccess(true);

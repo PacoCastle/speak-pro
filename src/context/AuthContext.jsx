@@ -10,24 +10,6 @@ export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        // 1. Check active session
-        supabase.auth.getSession().then(async ({ data: { session } }) => {
-            const formatted = await formatUser(session?.user);
-            setUser(formatted);
-            setLoading(false);
-        });
-
-        // 2. Listen for changes (Login/Logout/Auto-refresh)
-        const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
-            const formatted = await formatUser(session?.user);
-            setUser(formatted);
-            setLoading(false);
-        });
-
-        return () => subscription.unsubscribe();
-    }, []);
-
     // Helper to format Supabase user to our App's shape
     const formatUser = async (supabaseUser) => {
         if (!supabaseUser) return null;
@@ -55,6 +37,26 @@ export const AuthProvider = ({ children }) => {
             progress: profile?.progress || 0
         };
     };
+
+    useEffect(() => {
+        // 1. Check active session
+        supabase.auth.getSession().then(async ({ data: { session } }) => {
+            const formatted = await formatUser(session?.user);
+            setUser(formatted);
+            setLoading(false);
+        });
+
+        // 2. Listen for changes (Login/Logout/Auto-refresh)
+        const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
+            const formatted = await formatUser(session?.user);
+            setUser(formatted);
+            setLoading(false);
+        });
+
+        return () => subscription.unsubscribe();
+    }, []);
+
+
 
     const login = async (email, password) => {
         const { data, error } = await supabase.auth.signInWithPassword({
