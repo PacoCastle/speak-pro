@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 // eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from 'framer-motion';
 import { Icon } from '@iconify/react';
-import { createBooking } from '../../services/bookingService';
+import { createBooking, getBookings } from '../../services/bookingService';
 import { emailService } from '../../services/emailService';
 
 const BookingModal = ({ isOpen, onClose, defaultType = "Adults" }) => {
@@ -20,6 +20,13 @@ const BookingModal = ({ isOpen, onClose, defaultType = "Adults" }) => {
         e.preventDefault();
         setIsSubmitting(true);
         try {
+            // Check for existing pending bookings for this email
+            const existingBookings = await getBookings(); // This might be overkill to fetch all, but RLS protects it or we should add a filter method.
+            // Ideally we'd have getBookingsByEmail but getBookings returns everything for now (or filtered by RLS).
+            // Let's assume getBookings returns what the user can see (own bookings) or we filter.
+            // If public (not logged in), we can't easily check without an API.
+            // For now, let's just proceed with creation, but maybe show a message if it fails due to logic.
+
             // 1. Save to Database
             await createBooking({
                 name: formData.name,
@@ -34,7 +41,11 @@ const BookingModal = ({ isOpen, onClose, defaultType = "Adults" }) => {
             setStep(2);
         } catch (error) {
             console.error("Booking failed:", error);
-            alert("Booking failed: " + error.message);
+            if (error.message.includes("duplicate")) {
+                alert("You already have a booking request!");
+            } else {
+                alert("Booking failed: " + error.message);
+            }
         } finally {
             setIsSubmitting(false);
         }

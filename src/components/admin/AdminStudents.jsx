@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Icon } from '@iconify/react';
 import { supabase } from '../../lib/supabase';
+import StudentProgressModal from './StudentProgressModal';
 
 const AdminStudents = () => {
     const [students, setStudents] = useState([]);
@@ -25,6 +26,25 @@ const AdminStudents = () => {
 
         fetchStudents();
     }, []);
+
+    const [selectedStudent, setSelectedStudent] = useState(null);
+
+    const handleUpdate = () => {
+        // Just re-fetch the data to show updated level
+        const fetchStudents = async () => {
+            try {
+                const { data, error } = await supabase
+                    .from('profiles')
+                    .select('*')
+                    .order('email');
+                if (error) throw error;
+                setStudents(data);
+            } catch (error) {
+                console.error("Error refreshing students:", error);
+            }
+        };
+        fetchStudents();
+    };
 
     if (loading) return <div className="p-8 text-center text-gray-500">Loading Students...</div>;
 
@@ -66,12 +86,14 @@ const AdminStudents = () => {
                                     <span className="text-xs text-gray-400 mt-1 block">{student.progress || 0}%</span>
                                 </td>
                                 <td className="px-6 py-4 text-xs text-gray-500">
-                                    {/* Profiles table doesn't have created_at yet? It has updated_at. Using updated_at or empty for now. */}
                                     {student.updated_at ? new Date(student.updated_at).toLocaleDateString() : '-'}
                                 </td>
                                 <td className="px-6 py-4 text-right">
-                                    <button className="text-gray-400 hover:text-brand-600 transition-colors">
-                                        <Icon icon="mdi:dots-vertical" className="text-lg" />
+                                    <button
+                                        onClick={() => setSelectedStudent(student)}
+                                        className="text-brand-600 hover:text-brand-800 font-bold text-xs border border-brand-200 bg-brand-50 px-3 py-1 rounded transition-colors"
+                                    >
+                                        View
                                     </button>
                                 </td>
                             </tr>
@@ -86,6 +108,14 @@ const AdminStudents = () => {
                     </tbody>
                 </table>
             </div>
+
+            {selectedStudent && (
+                <StudentProgressModal
+                    student={selectedStudent}
+                    onClose={() => setSelectedStudent(null)}
+                    onUpdate={handleUpdate}
+                />
+            )}
         </div>
     );
 };

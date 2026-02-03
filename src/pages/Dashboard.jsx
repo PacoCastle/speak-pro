@@ -116,15 +116,29 @@ const Dashboard = () => {
                             <p>Loading...</p>
                         ) : nextClass ? (
                             <>
-                                <div className="bg-blue-50 rounded-xl p-4 border border-blue-100 mb-4">
-                                    <div className="flex items-center gap-2 text-blue-800 font-bold mb-1">
-                                        <Icon icon="mdi:clock-outline" /> {formatDate(nextClass.date, nextClass.time_slot)}
+                                <div className={`rounded-xl p-4 border mb-4 ${nextClass.status === 'Rejected' ? 'bg-red-50 border-red-100' : 'bg-blue-50 border-blue-100'}`}>
+                                    <div className={`flex items-center gap-2 font-bold mb-1 ${nextClass.status === 'Rejected' ? 'text-red-800' : 'text-blue-800'}`}>
+                                        <Icon icon={nextClass.status === 'Rejected' ? "mdi:alert-circle" : "mdi:clock-outline"} />
+                                        {formatDate(nextClass.date, nextClass.time_slot)}
                                     </div>
-                                    <p className="text-blue-600 text-sm">{nextClass.status === 'Approved' ? 'Placement Test (Approved)' : 'Placement Test (Pending)'}</p>
+                                    <p className={`text-sm ${nextClass.status === 'Rejected' ? 'text-red-600' : 'text-blue-600'}`}>
+                                        {nextClass.status === 'Approved' ? 'Placement Test (Approved)' :
+                                            nextClass.status === 'Rejected' ? 'Placement Test (Rejected)' :
+                                                'Placement Test (Pending)'}
+                                    </p>
                                 </div>
-                                <button className="w-full py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-lg font-bold transition-colors flex items-center justify-center gap-2">
-                                    <Icon icon="mdi:video" /> Join Classroom
-                                </button>
+                                {nextClass.status === 'Rejected' ? (
+                                    <button
+                                        onClick={() => navigate('/#placement-test')}
+                                        className="w-full py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-bold transition-colors flex items-center justify-center gap-2"
+                                    >
+                                        <Icon icon="mdi:refresh" /> Book Again
+                                    </button>
+                                ) : (
+                                    <button className="w-full py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-lg font-bold transition-colors flex items-center justify-center gap-2">
+                                        <Icon icon="mdi:video" /> Join Classroom
+                                    </button>
+                                )}
                             </>
                         ) : (
                             <div className="text-center py-4">
