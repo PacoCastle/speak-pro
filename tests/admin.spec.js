@@ -46,12 +46,6 @@ test.describe('Admin Dashboard Access', () => {
 
         // Cannot access Admin
         await page.goto('/admin');
-        await page.waitForLoadState('networkidle');
-        const content = await page.content();
-        console.log('--- DEBUG PAGE CONTENT START ---');
-        console.log(await page.innerText('body'));
-        console.log('--- DEBUG PAGE CONTENT END ---');
-
         await expect(page.getByText('Access Denied')).toBeVisible({ timeout: 5000 });
     });
 
