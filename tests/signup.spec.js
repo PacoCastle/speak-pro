@@ -8,7 +8,7 @@ test.describe('Student Signup Flow', () => {
         await expect(page).toHaveTitle(/Sign Up/);
 
         // 2. Fill Form
-        const uniqueEmail = `test.student.${Date.now()}@example.com`;
+        const uniqueEmail = `user${Date.now()}@example.com`;
         await page.fill('input[type="text"]', 'Test Student');
         await page.fill('input[type="email"]', uniqueEmail);
         await page.fill('input[type="password"]', 'password123');
@@ -17,24 +17,21 @@ test.describe('Student Signup Flow', () => {
         await page.click('button[type="submit"]');
 
         // 4. Verify Success or Capture Error
-        // Check if error displayed
-        if (await page.locator('.text-red-600').isVisible()) {
-            const err = await page.locator('.text-red-600').textContent();
+        // 4. Verify Result
+        const successMsg = page.locator('text=Check your email!');
+        const errorMsg = page.locator('.text-red-600');
+
+        // Wait for either result
+        await expect(successMsg.or(errorMsg)).toBeVisible({ timeout: 10000 });
+
+        if (await errorMsg.isVisible()) {
+            const err = await errorMsg.textContent();
             console.log('*** SIGNUP UI ERROR ***: ', err);
             throw new Error(`Signup failed in UI: ${err}`);
         }
 
-        // 4. Verify Success Message (Email Confirmation)
-        // Since Email Confirmation is ON, we expect to see the "Check your email" screen
-        // instead of a redirect to the dashboard.
-        try {
-            await expect(page.locator('text=Check your email!')).toBeVisible({ timeout: 5000 });
-            await expect(page.locator('text=We\'ve sent a confirmation link')).toBeVisible();
-        } catch (e) {
-            console.log('*** TEST FAILED. PAGE CONTENT: ***');
-            console.log(await page.locator('body').innerText());
-            throw e;
-        }
+        await expect(successMsg).toBeVisible();
+        await expect(page.locator('text=We\'ve sent a confirmation link')).toBeVisible();
     });
 
 });

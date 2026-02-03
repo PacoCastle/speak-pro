@@ -3,7 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import { Link } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import Navbar from '../components/layout/Navbar';
-import { Helmet } from 'react-helmet-async';
+import SEO from '../components/common/SEO';
 
 const Signup = () => {
     const [name, setName] = useState('');
@@ -34,9 +34,7 @@ const Signup = () => {
     if (registrationSuccess) {
         return (
             <div className="min-h-screen bg-gray-50 flex flex-col">
-                <Helmet>
-                    <title>Sign Up | SpeakPro Academy</title>
-                </Helmet>
+                <SEO title="Sign Up | SpeakPro Academy" />
                 <Navbar />
                 <div className="flex-grow flex items-center justify-center pt-20 px-4">
                     <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 border border-gray-100 text-center">
@@ -62,10 +60,7 @@ const Signup = () => {
 
     return (
         <div className="min-h-screen bg-gray-50 flex flex-col">
-            <Helmet>
-                <title>Sign Up | SpeakPro Academy</title>
-                <meta name="robots" content="noindex" />
-            </Helmet>
+            <SEO title="Sign Up | SpeakPro Academy" />
             <Navbar />
             <div className="flex-grow flex items-center justify-center pt-20 px-4">
                 <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
