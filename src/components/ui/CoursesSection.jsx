@@ -1,10 +1,38 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { courses } from '../../data/courses';
+import { courses as staticCourses } from '../../data/courses';
 import CourseCard from './CourseCard';
+import { supabase } from '../../lib/supabase';
 
 const CoursesSection = () => {
     const { t } = useTranslation();
+    const [displayCourses, setDisplayCourses] = useState(staticCourses);
+
+    useEffect(() => {
+        const fetchCourses = async () => {
+            try {
+                const { data, error } = await supabase
+                    .from('courses')
+                    .select('*')
+                    .eq('is_visible', true)
+                    .eq('is_deleted', false)
+                    .order('created_at', { ascending: true }); // Keep order stable
+
+                if (error) throw error;
+
+                if (data) {
+                    setDisplayCourses(data);
+                }
+            } catch (err) {
+                console.error("Error fetching courses:", err);
+                // Only use fallback on network error, NOT on empty data
+                setDisplayCourses(staticCourses);
+            }
+        };
+
+        fetchCourses();
+    }, []);
+
     return (
         <section id="courses" className="py-24 bg-white">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -24,7 +52,7 @@ const CoursesSection = () => {
                 </div>
 
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {courses.map((course, index) => (
+                    {displayCourses.map((course, index) => (
                         <CourseCard key={course.id} course={course} index={index} />
                     ))}
                 </div>

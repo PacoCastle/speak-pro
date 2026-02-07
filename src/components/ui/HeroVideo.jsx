@@ -11,12 +11,12 @@ import heroVideo from '../../assets/videos/BackgroundVideo.mp4';
 
 import { useScrollTo } from '../../hooks/useScrollTo';
 
-const HeroVideo = () => {
+const HeroVideo = ({ onOpenBooking }) => {
     const { t } = useTranslation();
     const scrollToSection = useScrollTo();
 
     return (
-        <section id="home" className="relative h-screen min-h-[700px] flex items-center justify-center overflow-hidden">
+        <section id="home" className="relative min-h-[100dvh] flex items-center justify-center overflow-hidden pb-16">
             {/* Video Background */}
             <div className="absolute inset-0 w-full h-full">
                 <video
@@ -62,16 +62,15 @@ const HeroVideo = () => {
                     </p>
 
                     {/* CTA Buttons */}
-                    <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
-                        <motion.button
-                            whileHover={{ scale: 1.05, boxShadow: "0 0 20px rgba(66,133,244,0.4)" }}
-                            whileTap={{ scale: 0.95 }}
-                            onClick={() => scrollToSection('test')}
-                            className="px-10 py-5 bg-brand-600 hover:bg-brand-700 text-white rounded-2xl font-black text-xl shadow-2xl transition-all flex items-center gap-3"
+                    <div className="flex flex-col sm:flex-row gap-6 justify-center items-center pb-8 p-4">
+                        <button
+                            onClick={onOpenBooking}
+                            data-testid="cta-adults"
+                            className="px-10 py-5 bg-brand-600 hover:bg-brand-700 text-white rounded-2xl font-black text-xl shadow-2xl transition-all flex items-center gap-3 transform hover:scale-105 active:scale-95"
                         >
                             <Icon icon="mdi:certificate" className="text-3xl" />
                             {t('placement.cta_adults') || "Get Level Test"}
-                        </motion.button>
+                        </button>
 
                         <motion.button
                             whileHover={{ scale: 1.05, backgroundColor: 'rgba(255,255,255,0.2)' }}

@@ -1,0 +1,60 @@
+
+Running 3 tests using 3 workers
+
+[1A[2K[1/3] [chromium] › tests\features.spec.js:10:5 › SpeakPro MVP Features › Homepage loads with correct metadata
+[1A[2K[2/3] [chromium] › tests\features.spec.js:23:5 › SpeakPro MVP Features › Placement Test Booking Flow (Adults)
+[1A[2K[3/3] [chromium] › tests\features.spec.js:15:5 › SpeakPro MVP Features › Teachers section loads dynamic data
+[1A[2K  1) [chromium] › tests\features.spec.js:15:5 › SpeakPro MVP Features › Teachers section loads dynamic data 
+
+    [31mTest timeout of 30000ms exceeded.[39m
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: getByText('Sarah Jenkins')
+    Expected: visible
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for getByText('Sarah Jenkins')[22m
+
+
+      17 |         await teachersSection.scrollIntoViewIfNeeded();
+      18 |
+    > 19 |         await expect(page.getByText('Sarah Jenkins')).toBeVisible();
+         |                                                       ^
+      20 |         await expect(page.getByText('5 Years Exp', { exact: true })).toBeVisible();
+      21 |     });
+      22 |
+        at C:\GitHubClean\SpeakPro\speak-pro\tests\features.spec.js:19:55
+
+    Error Context: test-results\features-SpeakPro-MVP-Feat-37c94--section-loads-dynamic-data-chromium\error-context.md
+
+
+[1A[2K  2) [chromium] › tests\features.spec.js:23:5 › SpeakPro MVP Features › Placement Test Booking Flow (Adults) 
+
+    [31mTest timeout of 30000ms exceeded.[39m
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+    [2m  - waiting for locator('div.relative.bg-white.rounded-2xl').locator('.iconify[data-icon="mdi:close"]')[22m
+
+
+      46 |
+      47 |         // Verify Close button works
+    > 48 |         await modalContent.locator('.iconify[data-icon="mdi:close"]').click();
+         |                                                                       ^
+      49 |
+      50 |         // Verify it closes
+      51 |         await expect(modalContent).not.toBeVisible();
+        at C:\GitHubClean\SpeakPro\speak-pro\tests\features.spec.js:48:71
+
+    Error Context: test-results\features-SpeakPro-MVP-Feat-9bd68-t-Test-Booking-Flow-Adults--chromium\error-context.md
+
+
+[1A[2K  2 failed
+    [chromium] › tests\features.spec.js:15:5 › SpeakPro MVP Features › Teachers section loads dynamic data 
+    [chromium] › tests\features.spec.js:23:5 › SpeakPro MVP Features › Placement Test Booking Flow (Adults) 
+  1 passed (39.5s)
+
+[36m  Serving HTML report at http://localhost:53692. Press Ctrl+C to quit.[39m

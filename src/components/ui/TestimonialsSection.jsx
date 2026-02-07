@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Icon } from '@iconify/react';
 // eslint-disable-next-line no-unused-vars
 import { motion } from 'framer-motion';
-
 import { useTranslation } from 'react-i18next';
+import { supabase } from '../../lib/supabase';
 
-const testimonials = [
+// Fallback data
+const staticTestimonials = [
     {
         name: "Maria Rossi",
         role: "Business Executive",
@@ -34,6 +35,43 @@ const testimonials = [
 
 const TestimonialsSection = () => {
     const { t } = useTranslation();
+    const [displayTestimonials, setDisplayTestimonials] = useState(staticTestimonials);
+
+    useEffect(() => {
+        const fetchTestimonials = async () => {
+            try {
+                const { data, error } = await supabase
+                    .from('testimonials')
+                    .select('*')
+                    .select('*')
+                    .eq('is_visible', true)
+                    .eq('is_deleted', false)
+                    .order('is_featured', { ascending: false }) // Featured first
+                    .order('created_at', { ascending: false })
+                    .limit(6); // Increased limit since we show non-featured too
+
+                if (error) throw error;
+
+                if (data) {
+                    // Map DB fields to UI fields if necessary
+                    const formatted = data.map(item => ({
+                        name: item.full_name,
+                        role: item.role || 'Student',
+                        content: item.content,
+                        rating: item.rating,
+                        image: item.image_url || 'https://ui-avatars.com/api/?name=' + item.full_name + '&background=random', // Fallback avatar
+                        lang: 'en' // Default or fetch if stored
+                    }));
+                    setDisplayTestimonials(formatted);
+                }
+            } catch (err) {
+                console.error("Error fetching testimonials:", err);
+                // Fallback only errors
+            }
+        };
+
+        fetchTestimonials();
+    }, []);
 
     return (
         <section className="py-24 bg-brand-50/30 overflow-hidden">
@@ -48,7 +86,7 @@ const TestimonialsSection = () => {
                 </div>
 
                 <div className="grid md:grid-cols-3 gap-8">
-                    {testimonials.map((item, idx) => (
+                    {displayTestimonials.map((item, idx) => (
                         <motion.div
                             key={idx}
                             initial={{ opacity: 0, y: 20 }}

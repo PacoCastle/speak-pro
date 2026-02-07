@@ -90,6 +90,40 @@ Cloudflare Pages offers excellent performance and global caching for static site
     *   **Build Output Directory**: `dist`
 5.  Click **Save and Deploy**.
 
+### Environment Variables (Cloudflare)
+Since this app uses real backend services, you must configure the following Environment Variables in Cloudflare Pages settings:
+
+| Variable | Description |
+| :--- | :--- |
+| `VITE_SUPABASE_URL` | Your Supabase Project URL. |
+| `VITE_SUPABASE_ANON_KEY` | Your Supabase Public (Anon) Key. |
+| `VITE_EMAILJS_SERVICE_ID` | EmailJS Service ID. |
+| `VITE_EMAILJS_TEMPLATE_ID` | EmailJS Template ID. |
+| `VITE_EMAILJS_PUBLIC_KEY` | EmailJS Public Key. |
+
+**Important**: After adding these variables, you must **Deployment -> Retry Deployment** (or push a new commit) for them to take effect.
+
+## 🧱 Backend Architecture
+
+### 1. Database (Supabase)
+The app uses a PostgreSQL database hosted on [Supabase](https://supabase.com/).
+
+- **Teachers Table** (`teachers`): 
+    - Stores instructor profiles.
+    - **RLS**: Public Read, Admin Write.
+- **Bookings Table** (`bookings`):
+    - Stores placement test requests.
+    - **RLS**: Public Insert (for guests), Admin View/Update (Approve/Reject).
+
+### 2. Authentication (Supabase Auth)
+- **Students**: Can register/login to view their dashboard.
+- **Admins**: Identified by email (`admin@speakpro.com`). Have special access to `/admin` routes.
+
+### 3. Email Service (EmailJS)
+The application uses [EmailJS](https://www.emailjs.com/) to send transactional emails directly from the frontend (Client-side) without a Node.js server.
+- **Booking Confirmation**: Sent immediately after a user submits the "Placement Test" form.
+- **Contact Form**: Sent when a user fills out the "Get in Touch" form.
+
 ### Option 2: Vercel or Netlify
 1.  Import the repository.
 2.  The framework (Vite) should be detected automatically.

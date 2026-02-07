@@ -2,19 +2,24 @@
 import { supabase } from '../lib/supabase';
 import { teachers as fallbackTeachers } from '../data/teachers';
 
-export const getTeachers = async () => {
+export const getTeachers = async (onlyVisible = false) => {
     try {
-        const { data, error } = await supabase
+        let query = supabase
             .from('teachers')
             .select('*')
             .order('name');
 
+        if (onlyVisible) {
+            query = query.eq('is_visible', true).eq('is_deleted', false);
+        }
+
+        const { data, error } = await query;
+
         if (error) throw error;
 
-        if (!data || data.length === 0) {
-            console.warn("No teachers found in DB, using fallback.");
-            return fallbackTeachers;
-        }
+        // CRITICAL FIX: Do NOT use fallback if data is just empty. Only on error.
+        // This prevents "Ghost" static teachers from appearing when you want an empty list.
+        if (!data) return [];
 
         return data.map(t => ({
             ...t,
@@ -28,6 +33,7 @@ export const getTeachers = async () => {
         }));
     } catch (error) {
         console.error("Error fetching teachers:", error);
+        // Only verify fallback if it's a connection error
         return fallbackTeachers;
     }
 };

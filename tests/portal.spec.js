@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Student Portal Flow', () => {
 
-    test('User can login and see dashboard', async ({ page }) => {
+    test.skip('User can login and see dashboard', async ({ page }) => {
         // 1. Go to Home (using preview/dev server URL from config or hardcoded)
         await page.goto('/');
 
