@@ -57,7 +57,7 @@ const Navbar = () => {
     }, []);
 
     const navLinks = [
-        { name: t('nav.home'), href: '#home' },
+        // { name: t('nav.home'), href: '#home' }, // Home is redundant with Logo
         { name: t('nav.features'), href: '#features' },
         { name: "About", href: "#about" },
         { name: "Teachers", href: "#teachers" },

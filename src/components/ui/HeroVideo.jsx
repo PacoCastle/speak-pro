@@ -16,7 +16,7 @@ const HeroVideo = () => {
     const scrollToSection = useScrollTo();
 
     return (
-        <section id="home" className="relative h-screen min-h-[700px] flex items-center justify-center overflow-hidden">
+        <section id="home" className="relative min-h-[100dvh] flex items-center justify-center overflow-hidden pb-16">
             {/* Video Background */}
             <div className="absolute inset-0 w-full h-full">
                 <video
@@ -62,7 +62,7 @@ const HeroVideo = () => {
                     </p>
 
                     {/* CTA Buttons */}
-                    <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
+                    <div className="flex flex-col sm:flex-row gap-6 justify-center items-center pb-8 p-4">
                         <motion.button
                             whileHover={{ scale: 1.05, boxShadow: "0 0 20px rgba(66,133,244,0.4)" }}
                             whileTap={{ scale: 0.95 }}
