@@ -5,7 +5,7 @@ import { Icon } from '@iconify/react';
 import Cal, { getCalApi } from "@calcom/embed-react";
 import { createBooking } from '../../services/bookingService';
 
-const BookingModal = ({ isOpen, onClose, defaultType = "Adults" }) => {
+const BookingModal = ({ isOpen, onClose }) => {
 
     useEffect(() => {
         (async function () {
