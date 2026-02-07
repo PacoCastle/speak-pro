@@ -7,6 +7,8 @@ import { createBooking } from '../../services/bookingService';
 
 const BookingModal = ({ isOpen, onClose }) => {
 
+    console.log('BookingModal Rendered, isOpen:', isOpen);
+
     useEffect(() => {
         (async function () {
             const cal = await getCalApi();
@@ -52,17 +54,11 @@ const BookingModal = ({ isOpen, onClose }) => {
         <AnimatePresence>
             <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
                 <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
                     onClick={onClose}
                     className="absolute inset-0 bg-black/60 backdrop-blur-sm"
                 />
 
                 <motion.div
-                    initial={{ opacity: 0, scale: 0.95, y: 20 }}
-                    animate={{ opacity: 1, scale: 1, y: 0 }}
-                    exit={{ opacity: 0 }}
                     className="relative bg-white rounded-2xl w-full max-w-4xl h-[90vh] shadow-2xl overflow-hidden flex flex-col"
                 >
                     <div className="flex justify-between items-center p-4 border-b">

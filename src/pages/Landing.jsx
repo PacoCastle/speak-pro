@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Navbar from '../components/layout/Navbar';
 import HeroVideo from '../components/ui/HeroVideo';
 import LeadForm from '../components/ui/LeadForm';
@@ -10,13 +10,15 @@ import AboutSection from '../components/ui/AboutSection';
 import TestimonialsSection from '../components/ui/TestimonialsSection';
 import EnrollmentTestSection from '../components/ui/EnrollmentTestSection';
 import SEO from '../components/common/SEO';
+import BookingModal from '../components/ui/BookingModal';
 
 const Landing = () => {
+    const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
     return (
         <>
             <SEO />
             <Navbar />
-            <HeroVideo />
+            <HeroVideo onOpenBooking={() => setIsBookingModalOpen(true)} />
             <FeaturesSection />
             <AboutSection />
             <EnrollmentTestSection />
@@ -25,6 +27,7 @@ const Landing = () => {
             <KidsSection />
             <TestimonialsSection />
             <LeadForm />
+            <BookingModal isOpen={isBookingModalOpen} onClose={() => setIsBookingModalOpen(false)} />
             <footer className="bg-gray-900 text-white py-16 border-t border-gray-800">
                 <div className="max-w-7xl mx-auto px-4 grid md:grid-cols-4 gap-8">
                     <div className="col-span-1 md:col-span-2">
