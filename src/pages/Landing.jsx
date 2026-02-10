@@ -35,7 +35,7 @@ const Landing = () => {
                             <span className="text-brand-500 font-display font-black">SpeakPro</span> Academy
                         </h3>
                         <p className="text-gray-400 max-w-sm">
-                            Empowering global communication through personalized language learning experiences for adults and children worldwide.
+                            Powered By Job Cruz
                         </p>
                     </div>
                     <div>
